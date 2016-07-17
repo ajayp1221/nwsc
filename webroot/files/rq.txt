@@ -1,0 +1,4 @@
+Array
+(
+    [alldata] => {"student":[{"school_id":"1","student_id":"1","teacher_id":"1","attendance":"1","session":"2015-2016","date":"27-01-2016","classroom_id":"1"},{"school_id":"1","student_id":"2","teacher_id":"1","attendance":"1","session":"2015-2016","date":"27-01-2016","classroom_id":"1"},{"school_id":"1","student_id":"3","teacher_id":"1","attendance":"1","session":"2015-2016","date":"27-01-2016","classroom_id":"1"},{"school_id":"1","student_id":"4","teacher_id":"1","attendance":"1","session":"2015-2016","date":"27-01-2016","classroom_id":"1"}]}
+)

@@ -1,0 +1,7 @@
+Array
+(
+    [device_token] => 123456
+    [deviceid] => 123456
+    [email] => ajayp944@gmail.com
+    [password] => 123456
+)
