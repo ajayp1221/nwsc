@@ -23,16 +23,16 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="<?php echo $authuser->android_api_img_medium; ?>" class="user-image" alt="User Image">
-                  <span class="hidden-xs"><?php echo $authuser->full_name; ?></span>
+                  <img src="<?php echo $authTeacher->android_api_img_medium; ?>" class="user-image" alt="User Image">
+                  <span class="hidden-xs"><?php echo $authTeacher->full_name; ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="<?php echo $authuser->android_api_img_medium; ?>" class="img-circle" alt="User Image">
+                    <img src="<?php echo $authTeacher->android_api_img_medium; ?>" class="img-circle" alt="User Image">
                     <p>
-                      <?php echo $authuser->full_name; ?>
-                      <small>Member since <?php echo date("M-Y",$authuser->created)?></small>
+                      <?php echo $authTeacher->full_name; ?>
+                      <small>Member since <?php echo date("M-Y",$authTeacher->created)?></small>
                     </p>
                   </li>
                   <!-- Menu Body -->

@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <img src="<?php echo $authuser->api_img_medium ?>" alt=""/>
+                                        <img src="<?php echo $authTeacher->api_img_medium ?>" alt=""/>
                                     </div>
                                 </div>
                             </div>

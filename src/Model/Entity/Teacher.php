@@ -109,7 +109,7 @@ class Teacher extends Entity
         if($this->_properties['image']){
             return $path.DS."upload".DS."teachers".DS."80-".$this->_properties['image'];
         }else{
-            return $path."img".DS."user.jpg";
+            return $path."img".DS."user-min.jpg";
         }
     }
     protected function _getFullName() {

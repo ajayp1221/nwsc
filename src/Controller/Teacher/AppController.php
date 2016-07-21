@@ -58,6 +58,7 @@ class AppController extends Controller
         $this->loadModel('Teachers');
         $authuser = $this->Teachers->find()->where(['id'=>$this->Auth->user('id')])->first();
         $this->set('authuser',$authuser);
+        $this->set('authTeacher',$authuser);
     }
 
     /**

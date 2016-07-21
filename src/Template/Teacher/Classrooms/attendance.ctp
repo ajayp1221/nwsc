@@ -66,8 +66,8 @@
                                                     if (@$student->studentattendances[0]->id) {
                                                         echo $this->Form->input("studentattendance.$i.id", ['value' => $student->studentattendances[0]->id, 'type' => 'hidden']);
                                                     }
-                                                    echo $this->Form->input("studentattendance.$i.teacher_id", ['value' => $authuser['id'], 'type' => 'hidden']);
-                                                    echo $this->Form->input("studentattendance.$i.school_id", ['value' => $authuser['school_id'], 'type' => 'hidden']);
+                                                        echo $this->Form->input("studentattendance.$i.teacher_id", ['value' => $authTeacher['id'], 'type' => 'hidden']);
+                                                    echo $this->Form->input("studentattendance.$i.school_id", ['value' => $authTeacher['school_id'], 'type' => 'hidden']);
                                                     echo $this->Form->input("studentattendance.$i.classroom_id", ['value' => $classrooms->id, 'type' => 'hidden']);
                                                     echo $this->Form->input("studentattendance.$i.session", ['value' => $student->session, 'type' => 'hidden']);
                                                     echo $this->Form->input("studentattendance.$i.status", ['value' => 1, 'type' => 'hidden']);

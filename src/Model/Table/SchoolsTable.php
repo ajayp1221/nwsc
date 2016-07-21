@@ -36,6 +36,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\HasMany $Examstables
  * @property \Cake\ORM\Association\HasMany $Events
  * @property \Cake\ORM\Association\HasMany $Schoolspayments
+ * @property \Cake\ORM\Association\HasMany $Schoolbusfees
  */
 class SchoolsTable extends Table
 {
@@ -157,6 +158,10 @@ class SchoolsTable extends Table
             'dependent' => TRUE
         ]);
         $this->hasMany('Schoolspayments', [
+            'foreignKey' => 'school_id',
+            'dependent' => TRUE
+        ]);
+        $this->hasMany('Schoolbusfees', [
             'foreignKey' => 'school_id',
             'dependent' => TRUE
         ]);

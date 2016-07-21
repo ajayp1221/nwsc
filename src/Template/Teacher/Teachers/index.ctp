@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <img src="<?php echo $authuser->android_api_img_medium ?>" />
+                                        <img src="<?php echo $authTeacher->android_api_img_medium ?>" />
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <?php echo $authuser->full_name ?>
+                                        <?php echo $authTeacher->full_name ?>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <?php echo $authuser->email ?>
+                                        <?php echo $authTeacher->email ?>
                                     </div>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <?php echo $authuser->mobile ?>
+                                        <?php echo $authTeacher->mobile ?>
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <?php echo $authuser->dob ?>
+                                        <?php echo $authTeacher->dob ?>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +91,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <?php echo $authuser->salary ?>
+                                        <?php echo $authTeacher->salary ?>
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <?php echo date('M-Y',$authuser->created) ?>
+                                        <?php echo date('M-Y',$authTeacher->created) ?>
                                     </div>
                                 </div>
                             </div>

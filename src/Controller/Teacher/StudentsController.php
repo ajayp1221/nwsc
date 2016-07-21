@@ -12,6 +12,7 @@ use App\Controller\Teacher\AppController;
  * @property \App\Model\Table\MobilelocalsTable $Mobilelocals
  * @property \App\Model\Table\SettingsTable $Settings
  * @property \App\Model\Table\SchoolfeesTable $Schoolfees
+ * @property \App\Model\Table\SchoolfeesTable $Schoolbusfees
  */
 class StudentsController extends AppController
 {
@@ -161,24 +162,42 @@ class StudentsController extends AppController
         $this->loadModel('Settings');
         $student = $this->Students->find()->where([
             'Students.slug' => $stSlug
-        ])->contain([
-            'Studentfees' => function($q){
-                return $q->contain([
-                    'Schoolfees' => function($q){
-                        return $q->contain(['Schoolfeeothercharges']);
-                    }
-                ])->orderDesc('Studentfees.id');
-            }
+        ])->select([
+            'id','school_id','classroom_id','studentid','session','first_name','last_name','is_bus','father_name','guardian_mobile_1','image'
         ])->first();
+        $studentfees = $this->Students->Studentfees->find()->where([
+            'Studentfees.student_id' => $student->id,'Studentfees.session'=>$this->Auth->user('session')
+        ])->contain([
+            'Schoolfees' => function($q){
+                return $q->select(['id','month','fee','session'])->where(['Schoolfees.session'=>$this->Auth->user('session')]);
+            }
+        ])->select([
+            'id','fee','discount','reason','date','bus_fee'
+        ])
+        ->orderDesc('Studentfees.id')->toArray();
+        $busfees = "";
+        if($student->is_bus){
+            $this->loadModel('Schoolbusfees');
+            $busfees = $this->Schoolbusfees->find()->where([
+                'school_id' => $student->school_id,
+                'session' => $student->session,
+                'status' => 1
+            ])->select([
+                'distance','fee'
+            ])->toArray();
+        }
+        $startmonth = $this->Settings->find()->select(['type','value'])->where(['type'=>'session_start_month'])->first();
+        $schoolFee = $this->loadModel('Schoolfees');
+        $schoolfees = $this->Schoolfees->find()
+                ->select(['id','school_id','classroom_id','month','fee','session'])
+                ->where(['school_id' => $student->school_id,'session' => $this->Auth->user('session'),'status'=>1])
+                ->toArray();
+        
         if($this->request->is(['post','put'])){
             $this->loadModel('Schoolfees');
             $d = $this->request->data;
             foreach($d['month'] as $month){
-                
                 $v = explode(":", $month);
-                if($v[0]<10){
-                    $v[0] = "0".$v[0];
-                }
                 $scMonthFee = $this->Schoolfees->find()->where([
                     'month' => $v[0],
                     'school_id' => $v[1],
@@ -191,13 +210,13 @@ class StudentsController extends AppController
                 }else{
                     $discountFee = 0;
                 }
-                if(count($d['month'])>1){
-                    $fee = $d['fee']-$scMonthFee->fee;
-                    if($d['discount']){
-                        $fee = $fee - $d['discount']/count($d['month']);
-                        $discountFee = $d['discount']/count($d['month']);
-                    }
-                    
+                $busFee = 0;
+                if($d['busfee']){
+                    $busFee = $d['busfee']/count($d['month']);
+                }
+                if($d['discount']){
+                    $fee = $scMonthFee->fee - $d['discount']/count($d['month']);
+                    $discountFee = $d['discount']/count($d['month']);
                 }
                 $d1[] = [
                     'school_id' => $v[1],
@@ -206,21 +225,25 @@ class StudentsController extends AppController
                     'schoolfee_id' => $scMonthFee->id,
                     'fee' => $fee,
                     'discount' => $discountFee,
-                    'resaon' => $d['resaon'],
+                    'reason' => $d['reason'],
                     'date' => date('d-F-Y'),
                     'status' => 1,
                     'deleted' => 0,
-                    'session' => $v[3]
+                    'session' => $v[3],
+                    'bus_fee' =>$busFee
                 ];
             }
             $d1 = $this->Students->Studentfees->newEntities($d1);
             foreach($d1 as $d2){
-                $this->Students->Studentfees->save($d2);
+                $res = $this->Students->Studentfees->save($d2);
+            }
+            if($res){
+                return $this->redirect($this->referer());
             }
         }
-        $startmonth = $this->Settings->find()->select(['type','value'])->where(['type'=>'session_start_month'])->first();
-        $this->set(compact('student','startmonth'));
-        $this->set('_serialize',['student','startmonth']);
+        
+        $this->set(compact('student','startmonth','schoolfees','studentfees','busfees'));
+        $this->set('_serialize',['student','startmonth','schoolfees','studentfees','busfees']);
     }
     
     
