@@ -23,7 +23,7 @@
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $setting->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $setting->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $setting->id], ['confirm' => __('Are you sure you want to delete # {0}?', $setting->id)]) ?>
+                    <?php //echo  $this->Form->postLink(__('Delete'), ['action' => 'delete', $setting->id], ['confirm' => __('Are you sure you want to delete # {0}?', $setting->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

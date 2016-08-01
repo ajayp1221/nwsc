@@ -124,6 +124,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <b> Role</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <b> <?= $teacher->role?></b>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <?php echo $this->element('footer');?>

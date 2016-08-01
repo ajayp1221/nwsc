@@ -33,4 +33,10 @@ class Schoolbusfee extends Entity
         '*' => true,
         'id' => false,
     ];
+    protected function _setCreated($created){
+        return $created->timestamp;
+    }
+    protected function _setModified($modified){
+        return $modified->timestamp;
+    }
 }

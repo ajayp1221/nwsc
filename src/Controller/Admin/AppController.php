@@ -40,7 +40,8 @@ class AppController extends Controller
                 ]
             ]
         ]);
-        if(!$this->Cookie->check('selectedSchool')){
+        
+        if($this->Cookie->check('selectedSchool') && $this->Auth->user('id')){
             $this->loadModel('Schools');
             $schoolInfo = $this->Schools->find()->hydrate(FALSE)->where(['user_id' => $this->Auth->user('id')])->first();
             $this->Cookie->write('selectedSchool',$schoolInfo, true, "2 week");

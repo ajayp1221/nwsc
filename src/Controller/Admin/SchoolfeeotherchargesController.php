@@ -53,7 +53,10 @@ class SchoolfeeotherchargesController extends AppController
     {
         $schoolfeeothercharge = $this->Schoolfeeothercharges->newEntity();
         if ($this->request->is('post')) {
-            $schoolfeeothercharge = $this->Schoolfeeothercharges->patchEntity($schoolfeeothercharge, $this->request->data);
+            $d = $this->request->data;
+            
+            $res = $this->Schoolfeeothercharges->Schoolfees->updateAll(['fee = fee + ' . $d['extra_charges']],['id' => $d['schoolfee_id']]);
+            $schoolfeeothercharge = $this->Schoolfeeothercharges->patchEntity($schoolfeeothercharge, $d);
             if ($this->Schoolfeeothercharges->save($schoolfeeothercharge)) {
                 $this->Flash->success(__('The schoolfeeothercharge has been saved.'));
                 return $this->redirect(['controller'=> 'schoolfees','action' => 'view',$this->request->data['schoolfee_id']]);
@@ -82,13 +85,12 @@ class SchoolfeeotherchargesController extends AppController
             $schoolfeeothercharge = $this->Schoolfeeothercharges->patchEntity($schoolfeeothercharge, $this->request->data);
             if ($this->Schoolfeeothercharges->save($schoolfeeothercharge)) {
                 $this->Flash->success(__('The schoolfeeothercharge has been saved.'));
-                return $this->redirect(['controller'=> 'schoolfees','action' => 'view',$this->request->data['schoolfee_id']]);
+                return $this->redirect(['controller'=> 'schoolfees','action' => 'view',$schoolfeeothercharge->schoolfee_id]);
             } else {
                 $this->Flash->error(__('The schoolfeeothercharge could not be saved. Please, try again.'));
             }
         }
-        $schoolfees = $this->Schoolfeeothercharges->Schoolfees->find('list', ['limit' => 200]);
-        $this->set(compact('schoolfeeothercharge', 'schoolfees'));
+        $this->set(compact('schoolfeeothercharge'));
         $this->set('_serialize', ['schoolfeeothercharge']);
     }
 

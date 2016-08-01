@@ -15,7 +15,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\HasMany $Schoolfees
  * @property \Cake\ORM\Association\HasMany $Studentfees
  * @property \Cake\ORM\Association\HasMany $Students
- * @property \Cake\ORM\Association\HasMany $StudentsSchoolfees
+ * @property \Cake\ORM\Association\HasMany $Schoolfees
  * @property \Cake\ORM\Association\HasMany $Timetables
  * @property \Cake\ORM\Association\HasMany $Studentattendances
  * @property \Cake\ORM\Association\HasMany $Events
@@ -60,10 +60,6 @@ class ClassroomsTable extends Table
             'dependent' => TRUE
         ]);
         $this->hasMany('Students', [
-            'foreignKey' => 'classroom_id',
-            'dependent' => TRUE
-        ]);
-        $this->hasMany('StudentsSchoolfees', [
             'foreignKey' => 'classroom_id',
             'dependent' => TRUE
         ]);

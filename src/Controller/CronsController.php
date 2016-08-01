@@ -36,7 +36,7 @@ class CronsController extends AppController
 //        $date = "23-05-2016";
         $methods = new \App\Common\Methods();
         $message = "";
-        $settings = $this->Settings->find()->select(['school_id','value'])->where(['type'=>'absent_sms_time','value'=> $time])->toArray();
+        $settings = $this->Settings->find()->select(['school_id','value'])->where(['type'=>'absent_sms_time','value'=> $time,'status' => 1])->toArray();
         foreach($settings as $setting){
             $studentattendances = $this->Studentattendances->find()->select([
                 'student_id','id'
@@ -69,9 +69,11 @@ class CronsController extends AppController
                             $setting->school_id,
                             'Studentattendances',
                             $studentattendance->id,
-                            $message,'Guardian','0',
+                            $message,
+                            'Guardian',
+                            $student->id,
                             $studentattendance->student->guardian_mobile_1
-                            );
+                        );
                     $multiplier = $res['multiplier'];
                     $this->Users->updateAll(['sms_sent = sms_sent + ' . $multiplier, "sms_left = sms_left - $multiplier"], ['id' => $scInfo->user->id]);
                 }
@@ -94,7 +96,7 @@ class CronsController extends AppController
 //        $date = "22-05-2016";
         $methods = new \App\Common\Methods();
         $message = "";
-        $settings = $this->Settings->find()->select(['school_id','value'])->where(['type'=>'absent_sms_time','value'=> $time])->toArray();
+        $settings = $this->Settings->find()->select(['school_id','value'])->where(['type'=>'absent_sms_time','value'=> $time,'status' => 1])->toArray();
         foreach($settings as $setting){
             $studentattendances = $this->Studentattendances->find()->select([
                 'student_id','id'
@@ -460,4 +462,17 @@ class CronsController extends AppController
         $this->set(compact(['result']));
         $this->set('_serialize','result');
     }
+    
+    
+    
+    public function gup(){
+//        $aa = "success | 917838283001 | 3108464057608201570-367625291643396713";
+//        $externalId = explode("|", $aa);
+        $methods = new \App\Common\Methods();
+        $res = $methods->smslogs('1','Test',1,'Thank You for registering with School Club, Your OTP is 123.','Test2',1,7838283001);
+        \Cake\Core\Configure::write('debug',TRUE);
+        debug($res);exit;
+    }
+    
+    
 }

@@ -10,6 +10,7 @@
             <li><?= $this->Html->link(__('Holidays'), ['controller' => 'holidays', 'action' => 'index']) ?></li>
             <li><?= $this->Html->link(__('Classrooms'), ['controller' => 'classrooms', 'action' => 'index']) ?></li>
             <li><?= $this->Html->link(__('Schoolfees'), ['controller' => 'schoolfees', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link(__('Schoolbusfees'), ['controller' => 'schoolbusfees', 'action' => 'index']) ?></li>
             <!--<li><?= $this->Html->link(__('Exam Timetable'), ['controller' => 'examstables', 'action' => 'index']) ?></li>-->
             <li><?= $this->Html->link(__('Result Category'), ['controller' => 'resultcategories', 'action' => 'index']) ?></li>
         <?php }elseif($authUser['role']=="ADMIN" || $authUser['role']=="HELPER"){?>

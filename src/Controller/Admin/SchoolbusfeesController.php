@@ -18,9 +18,6 @@ class SchoolbusfeesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Schools']
-        ];
         $schoolbusfees = $this->paginate($this->Schoolbusfees->find()->where([
             'school_id' => $this->Cookie->read('selectedSchool')['id'],
             'session' => $this->Cookie->read('selectedSchool')['session']
@@ -56,6 +53,10 @@ class SchoolbusfeesController extends AppController
     {
         $schoolbusfee = $this->Schoolbusfees->newEntity();
         if ($this->request->is('post')) {
+            $this->request->data['school_id'] =  $this->Cookie->read('selectedSchool')['id'];
+            $this->request->data['session'] = $this->Cookie->read('selectedSchool')['session'];
+            $this->request->data['status'] = 1;
+            $this->request->data['deleted'] = 0;
             $schoolbusfee = $this->Schoolbusfees->patchEntity($schoolbusfee, $this->request->data);
             if ($this->Schoolbusfees->save($schoolbusfee)) {
                 $this->Flash->success(__('The schoolbusfee has been saved.'));

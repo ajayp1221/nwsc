@@ -51,7 +51,6 @@
                 <td><?php if($schoolfeeothercharges->status){echo "Active";}else{echo "Inactive";} ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Schoolfeeothercharges', 'action' => 'edit', $schoolfeeothercharges->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Schoolfeeothercharges', 'action' => 'delete', $schoolfeeothercharges->id], ['confirm' => __('Are you sure you want to delete # {0}?', $schoolfeeothercharges->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

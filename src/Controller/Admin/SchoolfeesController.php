@@ -72,7 +72,7 @@ class SchoolfeesController extends AppController
             }
         }
         $classrooms = $this->Schoolfees->Classrooms->find('list', ['keyField' => 'id','valueField'=>'class_name'])->where([
-            'id' => $this->Cookie->read('selectedSchool')['id']
+            'school_id' => $this->Cookie->read('selectedSchool')['id']
         ]);
         $this->set(compact('schoolfee', 'classrooms'));
         $this->set('_serialize', ['schoolfee']);
@@ -87,11 +87,11 @@ class SchoolfeesController extends AppController
      */
     public function edit($id = null)
     {
-        $schoolfee = $this->Schoolfees->get($id);
+        $schoolfee = $this->Schoolfees->find()->contain(['Schoolfeeothercharges'])->where(['Schoolfees.id' => $id])->first();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $d = $this->request->data;
             $d['status'] = 1;
-            $d['school_id'] = $this->Cookie->read('selectedSchool')['school_id'];
+            $d['school_id'] = $this->Cookie->read('selectedSchool')['id'];
             $d['session'] = $this->Cookie->read('selectedSchool')['session'];
             $schoolfee = $this->Schoolfees->patchEntity($schoolfee, $d);
             if ($this->Schoolfees->save($schoolfee)) {

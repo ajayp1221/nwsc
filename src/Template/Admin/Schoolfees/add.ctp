@@ -8,13 +8,13 @@
             $month = ['01' => 'January', '02' => 'Fabruary','03' => 'March', '04' => 'April', '05' => 'May', '06' => 'June', '07'=>'July',
                 '08'=>'August', '09'=>'September','10'=> 'October','11'=>'November','12'=>'December'];
             echo $this->Form->input('month', ['options' => $month]);
-            echo $this->Form->input('fee');
+            echo $this->Form->input('fee',['label' => 'Total Fee']);
         ?>
         <?php for($i=1;$i<=5;$i++){?>
         <div class="col-md-12">
-                <label>Extra Charges <?= $i;?></label>
+                <label>Fee Charge <?= $i;?></label>
                 <?php echo $this->Form->input("schoolfeeothercharge.$i.extra_charges", [
-                    'label' => FALSE
+                    'label' => FALSE,
                     ]);?>
                 <label>Description <?= $i;?></label>
                 <?php echo $this->Form->input("schoolfeeothercharge.$i.description", [

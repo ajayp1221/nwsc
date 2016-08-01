@@ -159,6 +159,7 @@ class StudentsController extends AppController
      */
     
     public function fee($stSlug= null){
+        \Cake\Core\Configure::write('debug',false);
         $this->loadModel('Settings');
         $student = $this->Students->find()->where([
             'Students.slug' => $stSlug
@@ -196,6 +197,12 @@ class StudentsController extends AppController
         if($this->request->is(['post','put'])){
             $this->loadModel('Schoolfees');
             $d = $this->request->data;
+            if(!$d['discount']){
+                $totalSubmittedFee = $d['fee'];
+            }else{
+                $totalSubmittedFee = 0;
+            }
+            $d['receipt_no'] = rand("2","5").time();
             foreach($d['month'] as $month){
                 $v = explode(":", $month);
                 $scMonthFee = $this->Schoolfees->find()->where([
@@ -204,7 +211,7 @@ class StudentsController extends AppController
                     'classroom_id' => $v[2],
                     'session' => $v[3]
                 ])->first();
-                $fee = $d['fee'];
+                $fee = $scMonthFee->fee;
                 if($d['discount']){
                 $discountFee = $d['discount'];
                 }else{
@@ -217,6 +224,7 @@ class StudentsController extends AppController
                 if($d['discount']){
                     $fee = $scMonthFee->fee - $d['discount']/count($d['month']);
                     $discountFee = $d['discount']/count($d['month']);
+                    $totalSubmittedFee+=$fee;
                 }
                 $d1[] = [
                     'school_id' => $v[1],
@@ -230,15 +238,48 @@ class StudentsController extends AppController
                     'status' => 1,
                     'deleted' => 0,
                     'session' => $v[3],
-                    'bus_fee' =>$busFee
+                    'bus_fee' =>$busFee,
+                    'receipt_no' => $d['receipt_no']
                 ];
             }
             $d1 = $this->Students->Studentfees->newEntities($d1);
+            
             foreach($d1 as $d2){
                 $res = $this->Students->Studentfees->save($d2);
+                $resids .= $res->id."?";
             }
+            $resIds = base64_encode($d['receipt_no']);
+            
             if($res){
-                return $this->redirect($this->referer());
+                if($student->guardian_mobile_1){
+                    $scInfo = $this->Students->Schools->find()->where([
+                        'Schools.id' => $student->school_id
+                    ])->select([
+                        'id','user_id'
+                    ])->contain([
+                        'Users' => function($q){
+                            return $q->select(['id','sms_left']);
+                        }
+                    ])->first();
+                    if($scInfo->user->sms_left){
+                        $pName = explode(' ',$student->father_name);
+                        $pName = end($pName);
+                        $message = "Hello Mr. ".$pName." you have submitted fees ".$student->first_name."'s ".$totalSubmittedFee." rs of ".count($d['month'])." month";
+                        $methods = new \App\Common\Methods();
+                        $res1 = $methods->smslogs(
+                                $student->school_id,
+                                'Studentfees',
+                                1,
+                                $message,'Guardian',
+                                $student->id,
+                                $student->guardian_mobile_1
+                            );
+                        $multiplier = $res1['multiplier'];
+                        $this->loadModel('Users');
+                        $this->Users->updateAll(['sms_sent = sms_sent + ' . $multiplier, "sms_left = sms_left - $multiplier"], ['id' => $scInfo->user->id]);
+                    }
+                }
+                return $this->redirect(['controller'=>'students','action'=>'fee-invoice',$resIds]);
             }
         }
         
@@ -247,9 +288,36 @@ class StudentsController extends AppController
     }
     
     
-
+    public function feeInvoice($ids = NULL){
+        $ids = base64_decode($ids);
+        $fees = $this->Students->Studentfees->find()->where(['Studentfees.receipt_no'=>$ids])->select([
+            'fee','discount','reason','bus_fee','date','session','student_id','receipt_no','id'
+        ])->contain([
+            "Schoolfees" => function($q){
+                return $q->select(['id','month','fee','session'])->contain([
+                    'Schoolfeeothercharges' => function($q){
+                        return $q->select(['schoolfee_id','extra_charges','description']);
+                    }
+                ]);
+            }
+        ])->toArray();
+        $student = $this->Students->find()->where([
+            'Students.id' => $fees[0]->student_id
+        ])->select([
+            'id','first_name','last_name','studentid'
+        ])->contain([
+            "Classrooms" => function($q){
+                return $q->select(['name','section']);
+            },
+            "Schools" => function($q){
+                return $q->select(['name','image']);
+            },
+        ])->first();
+        $this->set(compact('student','fees'));
+    }
     
 
+    
 
 
 
